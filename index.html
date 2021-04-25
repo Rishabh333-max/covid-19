@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Covid 19 App</title>
+</head>
+<style>
+    #body {
+        margin: 0;
+        padding: o;
+    }
+
+    #header {
+        width: 100%;
+        height: 80px;
+        background-color: black;
+        color: white;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    
+
+    #forms {
+        margin: 20px 25%;
+        width: 50%;
+        height: 80px;
+        background-color: red;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #result {
+        margin: 20px 25%;
+        width: 50%;
+        background-color: gold;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    #cases,#country,#deaths,#casesPerOneMillion,#deathsPerOneMillion,#totalTests,#testsPerOneMillion,#critical,#recovered,#todayCases,#todayDeaths {
+        margin: 10px 20%;
+        width: 25%;
+        height: 50px;
+        background-color: red;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    
+}
+</style>
+
+<body>
+    <div id="header">
+        <div id="Logo">
+            <h2>Covid 19 App</h2>
+        </div>
+    </div>
+    <div id="forms"><input type="text" id="CountryName" placeholder="Country name">
+        <button id="SearchCovid">Search Covid Details</button>
+    </div>
+    <div id="result">
+        
+
+    </div>
+</body>
+<script>
+    var CountryName=document.getElementById("CountryName");
+    var SearchCovid=document.getElementById("SearchCovid");
+    var CovidResult=[];
+    var result=document.getElementById("result");
+    SearchCovid.addEventListener("click",function(e){
+        e.preventDefault();
+        var url="https://coronavirus-19-api.herokuapp.com/countries/"+CountryName.value;
+        fetch(url)
+        .then((response)=>{
+            return response.json();
+        })
+        .then((data)=>{
+            console.log(data);
+            CovidResult=[data];
+            renderlist();
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+    })
+    function renderlist(){
+        var res="";
+        for(let i=0;i<CovidResult.length;i++){
+            var single=CovidResult[i];
+            var html=`<div id="cases">active case:${single.cases}</div>
+        <div id="country">country Name:${single.country}</div>
+        <div id="deaths">deaths:${single.deaths}</div>
+        <div id="todayCases">todayCases:${single.todayCases}</div>
+        <div id="todayDeaths">todayDeaths:${single.todayDeaths}</div>
+        <div id="recovered">recovered:${single.recovered}</div>
+        <div id="critical">critical:${single.critical}</div>
+        <div id="casesPerOneMillion">casesPerOneMillion:${single.casesPerOneMillion}</div>
+        <div id="deathsPerOneMillion">deathsPerOneMillion:${single.deathsPerOneMillion}</div>
+        <div id="totalTests">totalTests:${single.totalTests}</div>
+        <div id="testsPerOneMillion">testsPerOneMillion:${single.testsPerOneMillion}</div>`;
+        res+=html;
+        }
+       result.innerHTML=res;
+    }
+
+
+</script>
+
+</html>
